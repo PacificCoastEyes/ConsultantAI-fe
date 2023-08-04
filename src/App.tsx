@@ -1,3 +1,4 @@
+import AuthContextProvider from "../src/contexts/AuthContext";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import MuiTheme from "./styles/global/MuiTheme";
@@ -10,15 +11,17 @@ function App() {
     return (
         <div id="App">
             <ThemeProvider theme={theme}>
-                <BrowserRouter>
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        {/* <Route path="/login" element={<Login />} />
+                <AuthContextProvider>
+                    <BrowserRouter>
+                        <Routes>
+                            <Route path="/" element={<Home />} />
+                            {/* <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<Signup />} />
                         <Route path="/logout" element={<Logout />} /> */}
-                        <Route path="*" element={<Home />} />
-                    </Routes>
-                </BrowserRouter>
+                            <Route path="*" element={<Home />} />
+                        </Routes>
+                    </BrowserRouter>
+                </AuthContextProvider>
             </ThemeProvider>
         </div>
     );
