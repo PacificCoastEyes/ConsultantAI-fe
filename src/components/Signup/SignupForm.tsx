@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ISignupFormData, ISignupErrorStatus } from "../../models/ISignupForm";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import PasswordStrengthBar from "react-password-strength-bar";
 import AuthFormBackground from "../../images/auth-form-background.jpg";
 const SignupForm = () => {
     useEffect(() => {
@@ -203,6 +204,21 @@ const SignupForm = () => {
                             label="Password"
                             color="primary"
                             margin="dense"
+                        />
+                        <PasswordStrengthBar
+                            password={signupFormData.signupPassword}
+                            minLength={0}
+                            scoreWords={[
+                                "Weak",
+                                "Weak",
+                                "Okay",
+                                "Good",
+                                "Strong",
+                            ]}
+                            style={{
+                                fontFamily:
+                                    "'Outfit', Arial, Helvetica, sans-serif",
+                            }}
                         />
                         <TextField
                             id="signupConfirmPassword"
