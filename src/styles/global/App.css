@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&family=Unica+One&display=swap");
+
+.page {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: 64px auto 40px;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+::selection {
+    background-color: #0097b2;
+}
+
+@media screen and (max-width: 900px) {
+    .page {
+        grid-template-rows: 48px auto 48px;
+    }
+}
