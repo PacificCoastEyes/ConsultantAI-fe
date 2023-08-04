@@ -1,20 +1,20 @@
 import { useEffect } from "react";
 import Header from "../components/global/Header";
-import Hero from "../components/Home/Hero";
+import LoginContent from "../components/Login/LoginContent";
 import Footer from "../components/global/Footer";
 
-const Home = () => {
+const Login = () => {
     useEffect(() => {
-        document.title = "Consultant.AI";
+        document.title = "Log In | Consultant.AI";
     }, []);
 
     return (
-        <div id="home" className="page">
+        <div id="login" className="page">
             <Header />
-            <Hero />
+            <LoginContent />
             <Footer />
         </div>
     );
 };
 
-export default Home;
+export default Login;

@@ -11,6 +11,9 @@ const Footer = () => {
             alignItems="center"
             paddingX={3}
         >
+            <Typography>
+                &copy; {new Date().getFullYear()} Consultant.AI
+            </Typography>
             <Stack direction="row">
                 <Link to="#">
                     <Typography marginRight={1}>Terms of Service</Typography>
@@ -20,9 +23,6 @@ const Footer = () => {
                     <Typography marginLeft={1}>Privacy Policy</Typography>
                 </Link>
             </Stack>
-            <Typography>
-                &copy; {new Date().getFullYear()} Consultant.AI
-            </Typography>
         </Box>
     );
 };

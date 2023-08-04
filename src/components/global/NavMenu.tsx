@@ -9,7 +9,13 @@ const NavMenu = () => {
 
     return (
         <Stack direction="row">
-            {!isLoggedIn && (
+            {isLoggedIn ? (
+                <NavLink to="/logout">
+                    <Button variant="contained" color="secondary">
+                        Logout
+                    </Button>
+                </NavLink>
+            ) : (
                 <>
                     <NavLink to="/signup">
                         <Button variant="contained" color="secondary">
@@ -18,17 +24,10 @@ const NavMenu = () => {
                     </NavLink>
                     <NavLink to="/login">
                         <Button variant="contained" color="secondary">
-                            Login
+                            Log In
                         </Button>
                     </NavLink>
                 </>
-            )}
-            {isLoggedIn && (
-                <NavLink to="/logout">
-                    <Button variant="contained" color="secondary">
-                        Logout
-                    </Button>
-                </NavLink>
             )}
         </Stack>
     );

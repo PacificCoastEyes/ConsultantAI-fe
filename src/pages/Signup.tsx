@@ -1,20 +1,20 @@
 import { useEffect } from "react";
 import Header from "../components/global/Header";
-import Hero from "../components/Home/Hero";
+import SignupContent from "../components/Signup/SignupContent";
 import Footer from "../components/global/Footer";
 
-const Home = () => {
+const Signup = () => {
     useEffect(() => {
-        document.title = "Consultant.AI";
+        document.title = "Sign Up | Consultant.AI";
     }, []);
 
     return (
-        <div id="home" className="page">
+        <div id="signup" className="page">
             <Header />
-            <Hero />
+            <SignupContent />
             <Footer />
         </div>
     );
 };
 
-export default Home;
+export default Signup;

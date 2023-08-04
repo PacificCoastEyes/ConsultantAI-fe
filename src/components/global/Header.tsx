@@ -13,7 +13,7 @@ const Header = () => {
                         display: "flex",
                         justifyContent: "space-between",
                         paddingX: {
-                            xs: 0,
+                            xs: 1,
                             sm: 3,
                         },
                     }}
