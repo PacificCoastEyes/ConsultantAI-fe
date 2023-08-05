@@ -1,5 +1,4 @@
 import { Box } from "@mui/material";
-import LoginHeroImage from "../../images/login-hero.jpg";
 
 const LoginHero = () => {
     return (
@@ -8,7 +7,8 @@ const LoginHero = () => {
             display={{ xs: "none", md: "initial" }}
             width="30%"
             sx={{
-                backgroundImage: `url(${LoginHeroImage})`,
+                backgroundImage:
+                    "url(https://consultantaistorage.blob.core.windows.net/assets/images/login-hero.jpg)",
                 backgroundSize: "cover",
                 backgroundPositionX: "50%",
             }}

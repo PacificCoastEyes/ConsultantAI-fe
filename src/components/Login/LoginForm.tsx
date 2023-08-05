@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ILoginFormData, ILoginErrorStatus } from "../../models/ILoginForm";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
-import AuthFormBackground from "../../images/auth-form-background.jpg";
+
+import {
+    validateEmail,
+    validatePassword,
+} from "../../utils/validation/LoginValidation";
+
 const LoginForm = () => {
     const [loginFormData, setLoginFormData] = useState<ILoginFormData>({
         loginEmail: "",
@@ -34,61 +39,28 @@ const LoginForm = () => {
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-        if (e.key === "Enter") {
-            if (currentFieldDisplayed === "email") validateEmail();
-            if (currentFieldDisplayed === "password") validatePassword();
-        }
+        if (e.key === "Enter") handleValidate();
     };
 
-    const validateEmail = (): void => {
-        if (!loginFormData.loginEmail) {
-            setHelperText(prevState => {
-                return {
-                    ...prevState,
-                    loginEmail: "Please enter an email address",
-                };
-            });
-            setHasError(prevState => {
-                return { ...prevState, loginEmail: true };
-            });
-        } else if (
-            loginFormData.loginEmail &&
-            !(
-                loginFormData.loginEmail.includes("@") &&
-                loginFormData.loginEmail.includes(".")
-            )
-        ) {
-            setHelperText(prevState => {
-                return {
-                    ...prevState,
-                    loginEmail: "Please enter a valid email address",
-                };
-            });
-            setHasError(prevState => {
-                return { ...prevState, loginEmail: true };
-            });
+    const handleValidate = (): void => {
+        if (currentFieldDisplayed === "email") {
+            validateEmail(
+                loginFormData.loginEmail,
+                setHelperText,
+                setHasError,
+                setCurrentFieldDisplayed
+            );
         } else {
-            setCurrentFieldDisplayed("password");
+            validatePassword(
+                loginFormData.loginPassword,
+                setHelperText,
+                setHasError,
+                handleSubmitLogin
+            );
         }
     };
 
-    const validatePassword = (): void => {
-        if (!loginFormData.loginPassword) {
-            setHelperText(prevState => {
-                return {
-                    ...prevState,
-                    loginPassword: "Please enter a password",
-                };
-            });
-            setHasError(prevState => {
-                return { ...prevState, loginPassword: true };
-            });
-        } else {
-            handleSubmit();
-        }
-    };
-
-    const handleSubmit = (): void => {};
+    const handleSubmitLogin = (): void => {};
 
     return (
         <Box
@@ -100,7 +72,8 @@ const LoginForm = () => {
             justifyContent="center"
             alignItems={{ xs: "flex-start", sm: "center" }}
             sx={{
-                backgroundImage: `url(${AuthFormBackground})`,
+                backgroundImage:
+                    "url(https://consultantaistorage.blob.core.windows.net/assets/images/auth-form-background.jpg)",
                 backgroundPositionX: {
                     xs: "35%",
                     sm: "80%",
@@ -149,11 +122,7 @@ const LoginForm = () => {
                 )}
                 <Button
                     variant="contained"
-                    onClick={
-                        currentFieldDisplayed === "email"
-                            ? validateEmail
-                            : validatePassword
-                    }
+                    onClick={handleValidate}
                     sx={{ marginTop: 1 }}
                 >
                     {currentFieldDisplayed === "email" ? "Continue" : "Log In"}

@@ -1,5 +1,4 @@
 import { Box, Typography } from "@mui/material";
-import HeroImage from "../../images/home-hero.jpg";
 
 const Hero = () => {
     return (
@@ -10,7 +9,8 @@ const Hero = () => {
             justifyContent={{ xs: "center", md: "flex-start" }}
             alignItems="center"
             sx={{
-                backgroundImage: `url(${HeroImage})`,
+                backgroundImage:
+                    "url(https://consultantaistorage.blob.core.windows.net/assets/images/home-hero.jpg)",
                 backgroundSize: "cover",
                 backgroundPositionX: "65%",
                 backgroundPositionY: "40%",

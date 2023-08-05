@@ -3,7 +3,12 @@ import { Link } from "react-router-dom";
 import { ISignupFormData, ISignupErrorStatus } from "../../models/ISignupForm";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import PasswordStrengthBar from "react-password-strength-bar";
-import AuthFormBackground from "../../images/auth-form-background.jpg";
+
+import {
+    validateEmail,
+    validateRest,
+} from "../../utils/validation/SignupValidation";
+
 const SignupForm = () => {
     useEffect(() => {
         document.title = "Signup | Consultant.AI";
@@ -44,94 +49,29 @@ const SignupForm = () => {
         });
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-        if (e.key === "Enter") {
-            if (currentFieldDisplayed === "email") validateEmail();
-            if (currentFieldDisplayed === "rest") validateRest();
-        }
-    };
-
-    const validateEmail = (): void => {
-        if (!signupFormData.signupEmail) {
-            setHelperText(prevState => {
-                return {
-                    ...prevState,
-                    signupEmail: "Please enter an email address",
-                };
-            });
-            setHasError(prevState => {
-                return { ...prevState, signupEmail: true };
-            });
-        } else if (
-            signupFormData.signupEmail &&
-            !(
-                signupFormData.signupEmail.includes("@") &&
-                signupFormData.signupEmail.includes(".")
-            )
-        ) {
-            setHelperText(prevState => {
-                return {
-                    ...prevState,
-                    signupEmail: "Please enter a valid email address",
-                };
-            });
-            setHasError(prevState => {
-                return { ...prevState, signupEmail: true };
-            });
+    const handleValidate = (): void => {
+        if (currentFieldDisplayed === "email") {
+            validateEmail(
+                signupFormData.signupEmail,
+                setHelperText,
+                setHasError,
+                setCurrentFieldDisplayed
+            );
         } else {
-            setCurrentFieldDisplayed("rest");
+            validateRest(
+                signupFormData,
+                setHelperText,
+                setHasError,
+                handleSubmitSignup
+            );
         }
     };
 
-    const checkForEmptyFields = (): boolean => {
-        let hasPassed = true;
-        Object.keys(signupFormData).forEach(field => {
-            if (!signupFormData[field as keyof typeof signupFormData]) {
-                setHelperText(prevState => {
-                    return {
-                        ...prevState,
-                        [field]: "This field is required",
-                    };
-                });
-                setHasError(prevState => {
-                    return { ...prevState, [field]: true };
-                });
-                hasPassed = false;
-            }
-        });
-        return hasPassed;
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+        if (e.key === "Enter") handleValidate();
     };
 
-    const checkPasswordsMatch = (): boolean => {
-        if (
-            signupFormData.signupPassword !==
-            signupFormData.signupConfirmPassword
-        ) {
-            setHelperText(prevState => {
-                return {
-                    ...prevState,
-                    signupConfirmPassword: "Passwords do not match",
-                };
-            });
-            setHasError(prevState => {
-                return { ...prevState, signupConfirmPassword: true };
-            });
-            return false;
-        }
-        return true;
-    };
-
-    const validateRest = (): void => {
-        let fieldsAreNotEmpty = false;
-        let passwordsMatch = false;
-        fieldsAreNotEmpty = checkForEmptyFields();
-        if (fieldsAreNotEmpty) {
-            passwordsMatch = checkPasswordsMatch();
-        }
-        if (fieldsAreNotEmpty && passwordsMatch) handleSubmit();
-    };
-
-    const handleSubmit = (): void => {
+    const handleSubmitSignup = (): void => {
         alert("passed!");
     };
 
@@ -145,7 +85,8 @@ const SignupForm = () => {
             justifyContent="center"
             alignItems={{ xs: "flex-start", sm: "center" }}
             sx={{
-                backgroundImage: `url(${AuthFormBackground})`,
+                backgroundImage:
+                    "url(https://consultantaistorage.blob.core.windows.net/assets/images/auth-form-background.jpg)",
                 backgroundPositionX: {
                     xs: "35%",
                     sm: "80%",
@@ -237,11 +178,7 @@ const SignupForm = () => {
                 )}
                 <Button
                     variant="contained"
-                    onClick={
-                        currentFieldDisplayed === "email"
-                            ? validateEmail
-                            : validateRest
-                    }
+                    onClick={handleValidate}
                     sx={{ marginTop: 1 }}
                 >
                     {currentFieldDisplayed === "email" ? "Continue" : "Sign Up"}
