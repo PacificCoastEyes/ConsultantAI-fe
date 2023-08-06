@@ -1,12 +1,15 @@
 import { Dispatch, SetStateAction } from "react";
+import axios from "../AxiosInstance";
+import { AxiosError } from "axios";
 import { ISignupFormData, ISignupErrorStatus } from "../../models/ISignupForm";
 
-export const validateEmail = (
+export const validateEmail = async (
     signupEmail: string,
+    setShowSpinner: Dispatch<SetStateAction<boolean>>,
     setHelperText: Dispatch<SetStateAction<ISignupFormData>>,
     setHasError: Dispatch<SetStateAction<ISignupErrorStatus>>,
     setCurrentFieldDisplayed: Dispatch<SetStateAction<string>>
-): void => {
+) => {
     if (!signupEmail) {
         setHelperText(prevState => {
             return {
@@ -31,7 +34,28 @@ export const validateEmail = (
             return { ...prevState, signupEmail: true };
         });
     } else {
-        setCurrentFieldDisplayed("rest");
+        setShowSpinner(true);
+        try {
+            await axios.post("/check-if-existing-user", { email: signupEmail });
+            setCurrentFieldDisplayed("rest");
+        } catch (err) {
+            setHelperText(prevState => {
+                return {
+                    ...prevState,
+                    signupEmail:
+                        err instanceof AxiosError
+                            ? err.response
+                                ? err.response.data
+                                : err.message
+                            : "Sorry, there was an error.",
+                };
+            });
+            setHasError(prevState => {
+                return { ...prevState, signupEmail: true };
+            });
+        } finally {
+            setShowSpinner(false);
+        }
     }
 };
 

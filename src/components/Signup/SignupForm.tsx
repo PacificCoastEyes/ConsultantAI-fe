@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "../../utils/AxiosInstance";
+import { AxiosError } from "axios";
 import { ISignupFormData, ISignupErrorStatus } from "../../models/ISignupForm";
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import {
+    Alert,
+    Box,
+    Button,
+    CircularProgress,
+    Stack,
+    TextField,
+    Typography,
+} from "@mui/material";
 import PasswordStrengthBar from "react-password-strength-bar";
 
 import {
@@ -37,6 +47,10 @@ const SignupForm = () => {
         signupConfirmPassword: false,
     });
 
+    const [showSpinner, setShowSpinner] = useState<boolean>(false);
+    const [showAlert, setShowAlert] = useState<boolean>(false);
+    const [alertMessage, setAlertMessage] = useState<string>("");
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setHelperText(prevState => {
             return { ...prevState, [e.target.id]: "" };
@@ -53,6 +67,7 @@ const SignupForm = () => {
         if (currentFieldDisplayed === "email") {
             validateEmail(
                 signupFormData.signupEmail,
+                setShowSpinner,
                 setHelperText,
                 setHasError,
                 setCurrentFieldDisplayed
@@ -71,8 +86,30 @@ const SignupForm = () => {
         if (e.key === "Enter") handleValidate();
     };
 
-    const handleSubmitSignup = (): void => {
-        alert("passed!");
+    const handleSubmitSignup = async () => {
+        const { signupName, signupEmail, signupPassword } = signupFormData;
+        setShowSpinner(true);
+        setShowAlert(false);
+        try {
+            const newUserId = await axios.post("/register", {
+                name: signupName,
+                email: signupEmail,
+                password: signupPassword,
+            });
+            console.log(newUserId);
+        } catch (err) {
+            console.error(err);
+            setAlertMessage(
+                err instanceof AxiosError
+                    ? err.response
+                        ? err.response.data
+                        : err.message
+                    : "Sorry, there was an error."
+            );
+            setShowAlert(true);
+        } finally {
+            setShowSpinner(false);
+        }
     };
 
     return (
@@ -102,7 +139,7 @@ const SignupForm = () => {
                 Already have a Consultant.AI account?{" "}
                 <Link to="/login">Log in</Link>
             </Typography>
-            <Stack>
+            <Stack width="237px">
                 {currentFieldDisplayed === "email" && (
                     <TextField
                         id="signupEmail"
@@ -176,12 +213,27 @@ const SignupForm = () => {
                         />
                     </>
                 )}
+                {showAlert && (
+                    <Alert severity="error" sx={{ marginTop: 1 }}>
+                        {alertMessage}
+                    </Alert>
+                )}
                 <Button
                     variant="contained"
                     onClick={handleValidate}
                     sx={{ marginTop: 1 }}
                 >
-                    {currentFieldDisplayed === "email" ? "Continue" : "Sign Up"}
+                    {showSpinner ? (
+                        <CircularProgress
+                            color="secondary"
+                            thickness={5}
+                            size="1.75em"
+                        />
+                    ) : currentFieldDisplayed === "email" ? (
+                        "Continue"
+                    ) : (
+                        "Sign Up"
+                    )}
                 </Button>
             </Stack>
         </Box>
