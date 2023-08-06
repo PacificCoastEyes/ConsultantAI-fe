@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
 import axios from "../../utils/AxiosInstance";
 import { AxiosError } from "axios";
 import { ISignupFormData, ISignupErrorStatus } from "../../models/ISignupForm";
+import { IAuthContext } from "../../models/IAuthContext";
+
 import {
     Alert,
     Box,
@@ -19,10 +22,15 @@ import {
     validateRest,
 } from "../../utils/validation/SignupValidation";
 
+import { logUserIn } from "../../utils/logUserIn";
+
 const SignupForm = () => {
     useEffect(() => {
         document.title = "Signup | Consultant.AI";
     }, []);
+
+    const authContext = useContext(AuthContext);
+    const { setIsLoggedIn, setActiveUser } = authContext as IAuthContext;
 
     const [signupFormData, setSignupFormData] = useState<ISignupFormData>({
         signupEmail: "",
@@ -91,12 +99,19 @@ const SignupForm = () => {
         setShowSpinner(true);
         setShowAlert(false);
         try {
-            const newUserId = await axios.post("/register", {
+            const res = await axios.post("/register", {
                 name: signupName,
                 email: signupEmail,
                 password: signupPassword,
             });
-            console.log(newUserId);
+            const { authToken, firstName, isAdmin } = res.data;
+            logUserIn(
+                authToken,
+                firstName,
+                isAdmin,
+                setIsLoggedIn,
+                setActiveUser
+            );
         } catch (err) {
             console.error(err);
             setAlertMessage(

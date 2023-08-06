@@ -1,14 +1,33 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
+import axios from "../../utils/AxiosInstance";
+import { AxiosError } from "axios";
 import { ILoginFormData, ILoginErrorStatus } from "../../models/ILoginForm";
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import { IAuthContext } from "../../models/IAuthContext";
+import {
+    Alert,
+    Box,
+    Button,
+    CircularProgress,
+    IconButton,
+    Stack,
+    TextField,
+    Typography,
+} from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
 
 import {
     validateEmail,
     validatePassword,
 } from "../../utils/validation/LoginValidation";
 
+import { logUserIn } from "../../utils/logUserIn";
+
 const LoginForm = () => {
+    const authContext = useContext(AuthContext);
+    const { setIsLoggedIn, setActiveUser } = authContext as IAuthContext;
+
     const [loginFormData, setLoginFormData] = useState<ILoginFormData>({
         loginEmail: "",
         loginPassword: "",
@@ -25,6 +44,10 @@ const LoginForm = () => {
         loginEmail: false,
         loginPassword: false,
     });
+
+    const [showSpinner, setShowSpinner] = useState<boolean>(false);
+    const [showAlert, setShowAlert] = useState<boolean>(false);
+    const [alertMessage, setAlertMessage] = useState<string>("");
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setHelperText(prevState => {
@@ -60,7 +83,37 @@ const LoginForm = () => {
         }
     };
 
-    const handleSubmitLogin = (): void => {};
+    const handleSubmitLogin = async () => {
+        const { loginEmail, loginPassword } = loginFormData;
+        setShowSpinner(true);
+        setShowAlert(false);
+        try {
+            const res = await axios.post("/login", {
+                email: loginEmail,
+                password: loginPassword,
+            });
+            const { authToken, firstName, isAdmin } = res.data;
+            logUserIn(
+                authToken,
+                firstName,
+                isAdmin,
+                setIsLoggedIn,
+                setActiveUser
+            );
+        } catch (err) {
+            console.error(err);
+            setAlertMessage(
+                err instanceof AxiosError
+                    ? err.response
+                        ? err.response.data
+                        : err.message
+                    : "Sorry, there was an error."
+            );
+            setShowAlert(true);
+        } finally {
+            setShowSpinner(false);
+        }
+    };
 
     return (
         <Box
@@ -88,7 +141,7 @@ const LoginForm = () => {
             <Typography marginTop={1}>
                 New to Consultant.AI? <Link to="/signup">Sign up</Link>
             </Typography>
-            <Stack>
+            <Stack width="237px">
                 {currentFieldDisplayed === "email" && (
                     <TextField
                         id="loginEmail"
@@ -120,12 +173,43 @@ const LoginForm = () => {
                         margin="dense"
                     />
                 )}
+                {showAlert && (
+                    <Stack
+                        direction="row"
+                        justifyContent="space-evenly"
+                        alignItems="center"
+                    >
+                        {currentFieldDisplayed === "password" && (
+                            <IconButton
+                                onClick={() =>
+                                    setCurrentFieldDisplayed("email")
+                                }
+                                sx={{ marginRight: 1 }}
+                            >
+                                <ArrowBack />
+                            </IconButton>
+                        )}
+                        <Alert severity="error" sx={{ marginTop: 1 }}>
+                            {alertMessage}
+                        </Alert>
+                    </Stack>
+                )}
                 <Button
                     variant="contained"
                     onClick={handleValidate}
                     sx={{ marginTop: 1 }}
                 >
-                    {currentFieldDisplayed === "email" ? "Continue" : "Log In"}
+                    {showSpinner ? (
+                        <CircularProgress
+                            color="secondary"
+                            thickness={5}
+                            size="1.75em"
+                        />
+                    ) : currentFieldDisplayed === "email" ? (
+                        "Continue"
+                    ) : (
+                        "Log In"
+                    )}
                 </Button>
             </Stack>
         </Box>
