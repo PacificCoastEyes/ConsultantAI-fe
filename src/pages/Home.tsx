@@ -10,7 +10,7 @@ const Home = ({ isLoggedOut }: { isLoggedOut?: boolean }) => {
 
     return (
         <div id="home" className="page">
-            <Header />
+            <Header isLoggedOut={isLoggedOut} />
             <Hero />
             <Footer />
         </div>
