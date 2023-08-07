@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import axios from "../../utils/AxiosInstance";
 import { AxiosError } from "axios";
@@ -27,6 +27,8 @@ import { logUserIn } from "../../utils/logUserIn";
 const LoginForm = () => {
     const authContext = useContext(AuthContext);
     const { setIsLoggedIn, setActiveUser } = authContext as IAuthContext;
+
+    const navigate = useNavigate();
 
     const [loginFormData, setLoginFormData] = useState<ILoginFormData>({
         loginEmail: "",
@@ -100,6 +102,7 @@ const LoginForm = () => {
                 setIsLoggedIn,
                 setActiveUser
             );
+            navigate("/dashboard");
         } catch (err) {
             console.error(err);
             setAlertMessage(
@@ -144,6 +147,7 @@ const LoginForm = () => {
             <Stack width="237px">
                 {currentFieldDisplayed === "email" && (
                     <TextField
+                        autoFocus
                         id="loginEmail"
                         type="email"
                         value={loginFormData.loginEmail}
@@ -160,6 +164,7 @@ const LoginForm = () => {
                 )}
                 {currentFieldDisplayed === "password" && (
                     <TextField
+                        autoFocus
                         id="loginPassword"
                         value={loginFormData.loginPassword}
                         onChange={handleChange}

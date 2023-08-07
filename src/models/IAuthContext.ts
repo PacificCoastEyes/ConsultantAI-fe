@@ -1,10 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-
-export interface IActiveUser {
-    firstName: string;
-    isAdmin: boolean;
-}
-
+import { IActiveUser } from "./IActiveUser";
 export interface IAuthContext {
     isLoggedIn: boolean;
     setIsLoggedIn: Dispatch<SetStateAction<boolean>>;

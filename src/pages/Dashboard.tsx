@@ -1,20 +1,20 @@
 import { useEffect } from "react";
 import Header from "../components/global/Header";
-import Hero from "../components/Home/Hero";
+import DashboardContent from "../components/Dashboard/DashboardContent";
 import Footer from "../components/global/Footer";
 
-const Home = ({ isLoggedOut }: { isLoggedOut?: boolean }) => {
+const Dashboard = () => {
     useEffect(() => {
-        document.title = "Consultant.AI";
+        document.title = "Welcome | Consultant.AI";
     }, []);
 
     return (
-        <div id="home" className="page">
+        <div id="dashboard" className="page">
             <Header />
-            <Hero />
+            <DashboardContent />
             <Footer />
         </div>
     );
 };
 
-export default Home;
+export default Dashboard;

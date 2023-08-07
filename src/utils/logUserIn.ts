@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { IActiveUser } from "../models/IAuthContext";
+import { IActiveUser } from "../models/IActiveUser";
 
 export const logUserIn = (
     authToken: string,

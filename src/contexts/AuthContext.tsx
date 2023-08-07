@@ -1,5 +1,6 @@
 import { createContext, useState } from "react";
-import { IActiveUser, IAuthContext } from "../models/IAuthContext";
+import { IAuthContext } from "../models/IAuthContext";
+import { IActiveUser } from "../models/IActiveUser";
 
 export const AuthContext = createContext<IAuthContext | null>(null);
 

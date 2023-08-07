@@ -7,6 +7,7 @@ import "./styles/global/App.css";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
     const theme = createTheme(MuiTheme);
@@ -19,7 +20,11 @@ function App() {
                             <Route path="/" element={<Home />} />
                             <Route path="/login" element={<Login />} />
                             <Route path="/signup" element={<Signup />} />
-                            {/* <Route path="/logout" element={<Logout />} /> */}
+                            <Route path="/dashboard" element={<Dashboard />} />
+                            <Route
+                                path="/logout"
+                                element={<Home isLoggedOut={true} />}
+                            />
                             <Route path="*" element={<Home />} />
                         </Routes>
                     </BrowserRouter>

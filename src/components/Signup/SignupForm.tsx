@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import axios from "../../utils/AxiosInstance";
 import { AxiosError } from "axios";
@@ -31,6 +31,8 @@ const SignupForm = () => {
 
     const authContext = useContext(AuthContext);
     const { setIsLoggedIn, setActiveUser } = authContext as IAuthContext;
+
+    const navigate = useNavigate();
 
     const [signupFormData, setSignupFormData] = useState<ISignupFormData>({
         signupEmail: "",
@@ -112,6 +114,7 @@ const SignupForm = () => {
                 setIsLoggedIn,
                 setActiveUser
             );
+            navigate("/dashboard");
         } catch (err) {
             console.error(err);
             setAlertMessage(
@@ -157,6 +160,7 @@ const SignupForm = () => {
             <Stack width="237px">
                 {currentFieldDisplayed === "email" && (
                     <TextField
+                        autoFocus
                         id="signupEmail"
                         type="email"
                         value={signupFormData.signupEmail}
@@ -174,6 +178,7 @@ const SignupForm = () => {
                 {currentFieldDisplayed === "rest" && (
                     <>
                         <TextField
+                            autoFocus
                             id="signupName"
                             value={signupFormData.signupName}
                             onChange={handleChange}
