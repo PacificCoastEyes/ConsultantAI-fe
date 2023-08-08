@@ -13,7 +13,12 @@ const AuthContextProvider = ({ children }: React.PropsWithChildren) => {
 
     return (
         <AuthContext.Provider
-            value={{ isLoggedIn, setIsLoggedIn, activeUser, setActiveUser }}
+            value={{
+                isLoggedIn,
+                setIsLoggedIn,
+                activeUser,
+                setActiveUser,
+            }}
         >
             {children}
         </AuthContext.Provider>

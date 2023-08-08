@@ -241,11 +241,12 @@ const SignupForm = () => {
                 <Button
                     variant="contained"
                     onClick={handleValidate}
+                    disabled={showSpinner ? true : false}
                     sx={{ marginTop: 1 }}
                 >
                     {showSpinner ? (
                         <CircularProgress
-                            color="secondary"
+                            color="primary"
                             thickness={5}
                             size="1.75em"
                         />

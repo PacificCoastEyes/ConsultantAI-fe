@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, AppBar, Box, Snackbar, Toolbar } from "@mui/material";
 import "../../styles/components/Header.css";
 
@@ -6,9 +6,12 @@ import Logo from "./Logo";
 import NavMenu from "./NavMenu";
 
 const Header = ({ isLoggedOut }: { isLoggedOut?: boolean }) => {
-    const [showLogoutSnackbar, setShowLogoutSnackbar] = useState<boolean>(
-        isLoggedOut ? true : false
-    );
+    const [showLogoutSnackbar, setShowLogoutSnackbar] =
+        useState<boolean>(false);
+
+    useEffect(() => {
+        if (isLoggedOut) setShowLogoutSnackbar(true);
+    }, [isLoggedOut]);
 
     return (
         <Box id="header">
