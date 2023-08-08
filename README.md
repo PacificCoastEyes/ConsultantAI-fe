@@ -14,4 +14,4 @@ This app is the user-facing frontend of the application. It consists of a homepa
 
 ### Languages, Tools, and Frameworks
 
-The app's UI is built with TypeScript-based React. The fully mobile-responsive design is based on customized Material UI. API calls are made with Axios. The app is hosted with Microsoft Azure Static Web Apps.
+The app's UI is built with TypeScript-based React, bootstrapped with Create React App. The fully mobile-responsive design is based on customized Material UI. API calls are made with Axios. The app is hosted with Microsoft Azure Static Web Apps.
